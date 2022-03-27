@@ -33,7 +33,7 @@
 
 #### 2. api
 
-集成了 swagger，入口：http://localhost:8080/swagger-ui.html
+集成了 swagger，入口：http://localhost:8080/swagger-ui.html，访问ip：http://13.89.25.182:8080/swagger-ui.html
 
 有两个接口：
 
