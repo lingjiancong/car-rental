@@ -62,28 +62,16 @@ public class CarReserveTimeCache {
         for (int i = 0; i < TIME_SIZE; ++i) {
             reserveTime.add(0);
         }
-        // 找出最小和最大时间
-        String minTime = "2099-01-01T23:59:59";
-        String maxTime = "0000-01-01T00:00:00";
-        for (CarReserveDO carReserveDO : carReserveDOS) {
-            String reserveStartTime = carReserveDO.getReserveStartTime();
-            String reserveEndTime = carReserveDO.getGetReserveEndTime();
-            if (minTime.compareTo(reserveStartTime) > 0) {
-                minTime = reserveStartTime;
-            }
-            if (maxTime.compareTo(reserveEndTime) < 0) {
-                maxTime = reserveEndTime;
-            }
-        }
-        LocalDateTime minDateTime = LocalDateTime.parse(minTime);
-        LocalDateTime maxDateTime = LocalDateTime.parse(maxTime);
-        // 做初始化
-
+        // 初始化被人预约的时段
         for (int i = 0; i < TIME_SIZE; ++i) {
             LocalDateTime localDateTime = LocalDateTimeUtils.parseDate(reserveDate).plusMinutes(i * 30);
-            // 已被人预约
-            if (minDateTime.compareTo(localDateTime) <= 0 && maxDateTime.compareTo(localDateTime) > 0) {
-                reserveTime.set(i, 1);
+            for (CarReserveDO carReserveDO : carReserveDOS) {
+                LocalDateTime reserveStartTime = LocalDateTime.parse(carReserveDO.getReserveStartTime());
+                LocalDateTime reserveEndTime = LocalDateTime.parse(carReserveDO.getGetReserveEndTime());
+                // 已被人预约
+                if (reserveStartTime.compareTo(localDateTime) <= 0 && reserveEndTime.compareTo(localDateTime) > 0) {
+                    reserveTime.set(i, 1);
+                }
             }
         }
         reserveTimeMap.put(key, reserveTime);
